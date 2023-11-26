@@ -1,7 +1,7 @@
 /**
  * Classe que implmenta um árvore de pesquisa binária AVL.
  *
- * @author Yasmin Cardozo Aguirre
+ * @author Yasmin Cardozo Aguirre - 23111329
  */
 
 public class ArvoreAVL {
@@ -79,6 +79,16 @@ public class ArvoreAVL {
     }
 
     /**
+     * Método que retorna o nodo pai de um determinado nodo.
+     * @param n Nodo filho.
+     * @return Nodo pai.
+     */
+    public Node getParent(Node n){
+        return n.father;
+    }
+    
+
+    /**
      * Método que verifica se um elemento está ou não na árvore.
      * @param element Elemento a ser buscado.
      * @return Boolean "true" se o elemento está na árvore, caso contrário "false".
@@ -89,10 +99,10 @@ public class ArvoreAVL {
     }
 
     /**
-     * 
-     * @param element
-     * @param n
-     * @return
+     * Método que busca um determinado nodo.
+     * @param element Elemento a ser buscado.
+     * @param n Nodo para comparar com o elemento.
+     * @return Nodo com o elemento.
      */
     private Node searchNodeRef(Integer element, Node n) {
         if (element == null || n == null)
@@ -109,23 +119,25 @@ public class ArvoreAVL {
     }
 
     /**
-     * 
-     * @param element
+     * Método que adiciona um elemento na árvore.  Notação O: O(log(n)).
+     * @param element Elemento a ser adicionado.
      */
-    public void add(Integer element) {
+    public void add(Integer element) { //Notação O: O(log(n)).
         root = add(root, element, null);
         count++;
         calculaBalance(root);
         verificaBalance(root);
     }
     /**
-     * 
-     * @param n
-     * @param e
-     * @param father
+     * Método que faz a inserção de um novo elemento na árvore de modo recursivo.
+     * Se nodo n = null chegamos no final da árvore, logo father recebe e como filho.
+     * Notação O: O(log(n)).
+     * @param n Nodo utilizado para verificar se já chegamos no fim da árvore.
+     * @param e Elemento a ser adicionado.
+     * @param father Nodo pai do nodo n.
      * @return
      */
-    private Node add(Node n, Integer element, Node father) {
+    private Node add(Node n, Integer element, Node father) { //Notação O: O(log(n)).
         if (n == null) { // insere
             Node aux = new Node(element);
             aux.father = father;
@@ -143,70 +155,6 @@ public class ArvoreAVL {
     }
 
     /**
-     * 
-     * @param element
-     * @return
-     */
-    public boolean remove(Integer element) {
-        if(element == null || root == null){
-            return false;
-        }
-        Node n = searchNodeRef(element, root);
-        if(n == null){
-            return false;
-        }
-        remove(n);
-        count --;
-        return true;
-    }
-
-    private void remove(Node n) {
-        Node father = n.father;
-        if(n.left == null && n.right == null){ //Se N é folha
-            if (father != null) {
-                if(father.left == n){ //Se N é folha esquerda
-                    father.left = null;
-                    n.father = null;
-                }else{ //Se N é folha direita
-                    father.right = null;
-                    n.father = null;
-                }
-            }else{
-                root = null;
-            }
-        }else if(n.right != null && n.left != null){
-            Node menor = smallest(n.right);
-            n.element = menor.element;
-            remove(menor);
-        }else if(n.left == null && n.right != null){ //Se N Só tem um filho na direita
-            if(father != null){
-                if(father.left == n){ //Se N é filho da esquerda
-                    father.left = n.right;
-                }else{ //Se N é filho da direita
-                    father.right = n.right;
-                }
-                n.right.father = father;
-            }else{
-                root= n.right;
-                root.father = null;
-            }
-        }else{ //Se N Só tem um filho na esquerda
-            if(father != null){
-                if(father.left == n){ //Se N é filho da esquerda
-                    father.left = n.left;
-                }else{ //Se N é filho da direita
-                    father.right = n.left;
-                }
-                n.right.father = father;
-            }else{
-                root= n.left;
-                root.father = null;
-            }
-        }  
-        verificaBalance(root);
-    }
-
-    /**
      * Retorna o menor elemento da arvore.
      * @return o menor elemento
      */
@@ -218,9 +166,9 @@ public class ArvoreAVL {
             return n.element;
     }
     /**
-     * 
-     * @param n
-     * @return
+     * Busca o menor elemento da árvore.
+     * @param n Nodo raiz.
+     * @return Nodo com o menor valor.
      */
     private Node smallest(Node n) {
         if (n == null)
@@ -231,7 +179,12 @@ public class ArvoreAVL {
         return n;
     }
 
-    public int height(Node n){
+    /**
+     * Método que retorna a altura da árvore. Notação O: O(n).
+     * @param n Nodo raiz.
+     * @return Altura da árvore.
+     */
+    public int height(Node n){ //Notação O: O(n).
         if(n.left == null && n.right == null){
             return 1;
         }else if(n.left != null && n.right == null){
@@ -243,6 +196,10 @@ public class ArvoreAVL {
         }
     }
 
+    /**
+     * Método que calcula o balancemento dos nodos e atualiza o atributo balance deles.
+     * @param n nodo a ser calculado o balancemaneto.
+     */
     public void calculaBalance(Node n){
         if(n.left == null && n.right == null){
             n.balance = 0;
@@ -261,6 +218,11 @@ public class ArvoreAVL {
         }
     }
 
+    /**
+     * Método que verifica se a árvore está balanceada.
+     * @param n Nodo raiz.
+     * @return Nodo balanceado.
+     */
     public Node verificaBalance(Node n){
         if(n.right != null){
             n.right= verificaBalance(n.right);
@@ -287,6 +249,11 @@ public class ArvoreAVL {
         return n;
     }
 
+    /**
+     * Método que faz a rotação simples a direita dos nodos.
+     * @param n Nodo desbalanceado.
+     * @return Antigo filho direito do nodo n.
+     */
     public Node rotacaoSimplesDireita(Node n){
         Node rightChild = n.right;
         Node childChildren = null;
@@ -302,19 +269,29 @@ public class ArvoreAVL {
         }
         return rightChild;
     }
-
+    
+    /**
+     * Método que faz a rotação dupla a direita. Alinha os nodos e chama a rotação simples a direita.
+     * @param n Nodo desbalanceado.
+     * @return Antigo filho direito do nodo n.
+     */
     public Node rotacaoDuplaDireita(Node n){
-        Node rightChild = n.right; //20
-        Node childChildren = rightChild.left; //15
-        Node insert = childChildren.right; //17
+        Node rightChild = n.right; 
+        Node childChildren = rightChild.left; 
+        Node insert = childChildren.right; 
 
-        rightChild.left = insert; //20 recebe esquerdo 17
-        childChildren.right = rightChild; // 15 direito recebe 20;
-        n.right = childChildren; //10 direito recebe 15
+        rightChild.left = insert; 
+        childChildren.right = rightChild;
+        n.right = childChildren;
 
         return rotacaoSimplesDireita(n);
     }
 
+    /**
+     * Método que faz a rotação simples a esquerda dos nodos.
+     * @param n Nodo desbalanceado.
+     * @return Antigo filho esquerdo do nodo n.
+     */
     public Node rotacaoSimplesEsquerda(Node n){
         Node leftChild;
         Node childChildren = null;
@@ -332,6 +309,11 @@ public class ArvoreAVL {
         return leftChild;
     }
 
+    /**
+     * Método que faz a rotação dupla a esquerda. Alinha os nodos e chama a rotação simples a esquerda.
+     * @param n Nodo desbalanceado.
+     * @return Antigo filho esquerdo do nodo n.
+     */
     public Node rotacaoDuplaEsquerda(Node n){
         Node leftChild = n.left;
         Node childChildren = leftChild.right;
@@ -342,6 +324,54 @@ public class ArvoreAVL {
         n.left = childChildren;
 
         return rotacaoSimplesEsquerda(n);
+    }
+
+
+    /**
+     * Método que retorna uma lista encadeada com os elementos da árvore na ordem do caminhamento central.
+     * @return Lista encadeada.
+     */
+    public LinkedListOfInteger positionsCentral() {
+        LinkedListOfInteger res = new LinkedListOfInteger();
+        positionsCentralAux(root, res);
+        return res;
+    }
+
+    /**
+     * Método que monta a lista encadeada com os elementos da árvore na ordem do caminhamento central.
+     * @param n Nodo.
+     * @param res Lista.
+     */
+    private void positionsCentralAux(Node n, LinkedListOfInteger res) {
+        if (n != null) {
+            positionsCentralAux(n.left, res); //Visita a subárvore da esquerda
+            res.add(n.element); //Visita o nodo
+            positionsCentralAux(n.right, res); //Visita a subárvore da direita
+        }
+    }
+
+    /**
+     * Método que retorna uma lista encadada com os elementos da arvore na ordem do caminhamento por largura.
+     * @return lista encadeada.
+     */
+    public LinkedListOfInteger positionsWidth() {
+        Queue<Node> fila = new Queue<>();
+        Node atual = null;
+        LinkedListOfInteger res = new LinkedListOfInteger();
+        if (root != null) {
+            fila.enqueue(root);
+            while (!fila.isEmpty()) {
+                atual = fila.dequeue();
+                if (atual.left != null) {
+                    fila.enqueue(atual.left);
+                }
+                if (atual.right != null) {
+                    fila.enqueue(atual.right);
+                }
+                res.add(atual.element);
+            }
+        }
+        return res;
     }
 
     private void GeraConexoesDOT(Node nodo) {
@@ -395,97 +425,4 @@ public class ArvoreAVL {
         GeraConexoesDOT(root);
         System.out.println("}" + "\n");
     } 
-
-/**
-     * 
-     * @return
-     */
-    public LinkedListOfInteger positionsPre() {
-        LinkedListOfInteger res = new LinkedListOfInteger();
-        positionsPreAux(root, res);
-        return res;
-    }
-
-    /**
-     * 
-     * @param n
-     * @param res
-     */
-    private void positionsPreAux(Node n, LinkedListOfInteger res) {
-        if (n != null) {
-            res.add(n.element); //Visita o nodo
-            positionsPreAux(n.left, res); //Visita a subárvore da esquerda
-            positionsPreAux(n.right, res); //Visita a subárvore da direita
-        }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public LinkedListOfInteger positionsPos() {
-        LinkedListOfInteger res = new LinkedListOfInteger();
-        positionsPosAux(root, res);
-        return res;
-    }
-
-    /**
-     * 
-     * @param n
-     * @param res
-     */
-    private void positionsPosAux(Node n, LinkedListOfInteger res) {
-        if (n != null) {
-            positionsPosAux(n.left, res); //Visita a subárvore da esquerda
-            positionsPosAux(n.right, res); //Visita a subárvore da direita
-            res.add(n.element); //Visita o nodo
-        }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public LinkedListOfInteger positionsCentral() {
-        LinkedListOfInteger res = new LinkedListOfInteger();
-        positionsCentralAux(root, res);
-        return res;
-    }
-
-    /**
-     * 
-     * @param n
-     * @param res
-     */
-    private void positionsCentralAux(Node n, LinkedListOfInteger res) {
-        if (n != null) {
-            positionsCentralAux(n.left, res); //Visita a subárvore da esquerda
-            res.add(n.element); //Visita o nodo
-            positionsCentralAux(n.right, res); //Visita a subárvore da direita
-        }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public LinkedListOfInteger positionsWidth() {
-        Queue<Node> fila = new Queue<>();
-        Node atual = null;
-        LinkedListOfInteger res = new LinkedListOfInteger();
-        if (root != null) {
-            fila.enqueue(root);
-            while (!fila.isEmpty()) {
-                atual = fila.dequeue();
-                if (atual.left != null) {
-                    fila.enqueue(atual.left);
-                }
-                if (atual.right != null) {
-                    fila.enqueue(atual.right);
-                }
-                res.add(atual.element);
-            }
-        }
-        return res;
-    }
 }
