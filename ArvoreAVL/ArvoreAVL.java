@@ -119,10 +119,10 @@ public class ArvoreAVL {
     }
 
     /**
-     * Método que adiciona um elemento na árvore.  Notação O: O(log(n)).
+     * Método que adiciona um elemento na árvore.
      * @param element Elemento a ser adicionado.
      */
-    public void add(Integer element) { //Notação O: O(log(n)).
+    public void add(Integer element) {
         root = add(root, element, null);
         count++;
         calculaBalance(root);
@@ -186,7 +186,7 @@ public class ArvoreAVL {
      */
     public int height(Node n){ //Notação O: O(n).
         if(n.left == null && n.right == null){
-            return 1;
+            return 0;
         }else if(n.left != null && n.right == null){
             return 1 + height(n.left);
         }else if(n.left == null && n.right != null){

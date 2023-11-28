@@ -12,8 +12,8 @@ public class Main {
     b.add(7);
     b.add(8);
     b.add(9);
-    System.out.println(b.height(b.getRoot()));
-    System.out.println(b.positionsWidth().toString());
+    System.out.println("Altura da árvore: " +b.height(b.getRoot()));
+    System.out.println("Caminhamento por largura: " +b.positionsWidth().toString());
     System.out.println("---------------------");
     b.GeraDOT();
 
@@ -27,8 +27,8 @@ public class Main {
     c.add(3);
     c.add(2);
     c.add(1);
-    System.out.println(c.height(c.getRoot()));
-    System.out.println(c.positionsCentral().toString());
+    System.out.println("Altura da árvore: " +c.height(c.getRoot()));
+    System.out.println("Caminhamento central: " +c.positionsCentral().toString());
     System.out.println("---------------------");
     c.GeraDOT();
   }
