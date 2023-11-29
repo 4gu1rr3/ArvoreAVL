@@ -14,8 +14,8 @@ public class ArvoreAVL {
         public Node left;
         public Node right;
         public Integer element;
-        private int balance; 
-        
+        private int balance;
+       
         /**
          * Método construtor da classe Node.
          * Cria um nodo sem pai, esquerda ou direita, somente adicionando o valor a ser armazenado nele.
@@ -86,7 +86,7 @@ public class ArvoreAVL {
     public Node getParent(Node n){
         return n.father;
     }
-    
+   
 
     /**
      * Método que verifica se um elemento está ou não na árvore.
@@ -143,7 +143,7 @@ public class ArvoreAVL {
             aux.father = father;
             return aux;
         }
-        
+       
         // Senao, insere na subarvore da esq ou da dir
         if (n.element.compareTo(element) < 0) {
             n.right = add(n.right, element, n); // dir
@@ -204,14 +204,14 @@ public class ArvoreAVL {
         if(n.left == null && n.right == null){
             n.balance = 0;
         }else if(n.left == null && n.right != null){
-            n.balance = height(n.right) - 0;
+            n.balance += height(n.right);
         }else if(n.left != null && n.right == null){
-            n.balance = 0 - height(n.left);
+            n.balance += 0 - height(n.left);
         }else{
             n.balance = height(n.right) - height(n.left);
         }
         if(n.left != null){
-            calculaBalance(n.left); 
+            calculaBalance(n.left);
         }
         if(n.right != null){
             calculaBalance(n.right);
@@ -226,26 +226,28 @@ public class ArvoreAVL {
     public Node verificaBalance(Node n){
         if(n.right != null){
             n.right= verificaBalance(n.right);
+            calculaBalance(n);
         }
         if(n.left != null){
             n.left= verificaBalance(n.left);
+            calculaBalance(n);
         }
-        calculaBalance(n);
         if(n.balance >= 2 || n.balance <= -2){
             if(n.balance >= 2){
-                if(n.balance * n.right.balance >0){
+                if(n.right.right != null){
                     return rotacaoSimplesDireita(n);
                 }else{
                     return rotacaoDuplaDireita(n);
                 }
             }else{
-                if(n.balance * n.left.balance > 0){
+                if(n.left.left !=null){
                     return rotacaoSimplesEsquerda(n);
                 }else{
                     return rotacaoDuplaEsquerda(n);
                 }
             }
         }
+        calculaBalance(n);
         return n;
     }
 
@@ -261,7 +263,7 @@ public class ArvoreAVL {
             if(n.right.left != null){
                 childChildren = n.right.left;
             }
-        } 
+        }
         rightChild.left = n;
         n.right = childChildren;
         if(root == n){
@@ -269,18 +271,18 @@ public class ArvoreAVL {
         }
         return rightChild;
     }
-    
+   
     /**
      * Método que faz a rotação dupla a direita. Alinha os nodos e chama a rotação simples a direita.
      * @param n Nodo desbalanceado.
      * @return Antigo filho direito do nodo n.
      */
     public Node rotacaoDuplaDireita(Node n){
-        Node rightChild = n.right; 
-        Node childChildren = rightChild.left; 
-        Node insert = childChildren.right; 
+        Node rightChild = n.right;
+        Node childChildren = rightChild.left;
+        Node insert = childChildren.right;
 
-        rightChild.left = insert; 
+        rightChild.left = insert;
         childChildren.right = rightChild;
         n.right = childChildren;
 
@@ -416,7 +418,7 @@ public class ArvoreAVL {
     // Versoes online do GraphViz pode ser encontradas em
     // http://www.webgraphviz.com/
     // http://viz-js.com/
-    // https://dreampuf.github.io/GraphvizOnline 
+    // https://dreampuf.github.io/GraphvizOnline
     public void GeraDOT() {
         System.out.println("digraph g { \nnode [shape = record,height=.1];\n" + "\n");
 
@@ -424,5 +426,5 @@ public class ArvoreAVL {
         System.out.println("");
         GeraConexoesDOT(root);
         System.out.println("}" + "\n");
-    } 
+    }
 }
